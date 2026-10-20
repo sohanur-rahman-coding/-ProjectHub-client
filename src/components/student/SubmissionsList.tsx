@@ -49,17 +49,17 @@ export const SubmissionsList: React.FC = () => {
 
   if (submissions.length === 0) {
     return (
-      <Card className="text-center py-16 px-4 max-w-xl mx-auto border-dashed border-slate-800 bg-slate-900/40">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 mb-4">
-          <Inbox className="w-7 h-7" />
+      <Card className="text-center py-16 px-6 max-w-lg mx-auto border border-dashed border-slate-800 bg-slate-900/40 shadow-xl">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mb-4 shadow-lg shadow-blue-500/10">
+          <Inbox className="w-8 h-8" />
         </div>
-        <CardTitle className="text-lg font-bold text-white">No submissions yet</CardTitle>
-        <p className="text-xs text-slate-400 mt-2 max-w-sm mx-auto">
-          You haven&apos;t submitted any projects for evaluation. When you submit a project, its status and mentor reviews will appear here.
+        <CardTitle className="text-xl font-bold text-white">No project submissions yet</CardTitle>
+        <p className="text-xs text-slate-400 mt-2 max-w-sm mx-auto leading-relaxed">
+          You haven&apos;t submitted any projects for evaluation. When you submit a project, its evaluation status and mentor feedback will appear here in real time.
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex items-center justify-center gap-3">
           <Link href="/student/submit">
-            <Button variant="primary" size="md">
+            <Button variant="primary" size="md" className="font-semibold shadow-md shadow-blue-500/20">
               <PlusCircle className="w-4 h-4 mr-2" />
               Submit Your First Project
             </Button>

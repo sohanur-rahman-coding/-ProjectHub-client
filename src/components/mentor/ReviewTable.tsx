@@ -22,6 +22,8 @@ import {
   Edit3,
   RefreshCw,
   Inbox,
+  SearchX,
+  RotateCcw,
 } from 'lucide-react';
 
 interface ReviewTableProps {
@@ -189,13 +191,44 @@ export const ReviewTable: React.FC<ReviewTableProps> = ({ onDataChange }) => {
             ) : submissions.length === 0 ? (
               <tr>
                 <td colSpan={6} className="py-16 text-center text-slate-400">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800/60 text-slate-500 mb-3">
-                    <Inbox className="w-6 h-6" />
+                  <div className="max-w-sm mx-auto p-6 rounded-2xl bg-slate-900/40 border border-dashed border-slate-800 text-center space-y-3">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800/80 text-slate-400">
+                      {searchTerm || statusFilter !== 'ALL' ? (
+                        <SearchX className="w-7 h-7 text-amber-400" />
+                      ) : (
+                        <Inbox className="w-7 h-7 text-blue-400" />
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-bold text-white">
+                        {searchTerm || statusFilter !== 'ALL'
+                          ? 'No matching project submissions'
+                          : 'Review queue is currently empty'}
+                      </p>
+                      <p className="text-xs text-slate-400 leading-relaxed">
+                        {searchTerm || statusFilter !== 'ALL'
+                          ? `No records found matching status "${statusFilter}" or keyword "${searchTerm}".`
+                          : 'New submissions from students will appear here in real-time.'}
+                      </p>
+                    </div>
+
+                    {(searchTerm || statusFilter !== 'ALL') && (
+                      <div className="pt-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSearchTerm('');
+                            setStatusFilter('ALL');
+                          }}
+                          className="text-xs border-slate-700 hover:border-slate-600 text-slate-200"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
+                          Clear Filters & Search
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-sm font-semibold text-slate-300">No project submissions found</p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Try adjusting your search criteria or status filter.
-                  </p>
                 </td>
               </tr>
             ) : (
