@@ -10,7 +10,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (credentials: { email: string; password: string }) => Promise<void>;
-  register: (userData: { name: string; email: string; password: string }) => Promise<void>;
+  register: (userData: { name: string; email: string; password: string; role?: 'STUDENT' | 'MENTOR' }) => Promise<void>;
   logout: () => void;
   isMentor: boolean;
   isStudent: boolean;
@@ -69,13 +69,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (userData: { name: string; email: string; password: string }) => {
+  const register = async (userData: { name: string; email: string; password: string; role?: 'STUDENT' | 'MENTOR' }) => {
     const res = await api.auth.register(userData);
     if (res.data) {
       localStorage.setItem('auth_token', res.data.token);
       setToken(res.data.token);
       setUser(res.data.user);
-      router.push('/student/submit');
+
+      if (res.data.user.role === 'MENTOR' || res.data.user.role === 'ADMIN') {
+        router.push('/mentor/dashboard');
+      } else {
+        router.push('/student/submit');
+      }
     }
   };
 

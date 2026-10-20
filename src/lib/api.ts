@@ -56,7 +56,7 @@ export const api = {
       });
     },
 
-    register: async (userData: { name: string; email: string; password: string }) => {
+    register: async (userData: { name: string; email: string; password: string; role?: 'STUDENT' | 'MENTOR' }) => {
       return request<ApiResponse<{ user: User; token: string }>>('/auth/register', {
         method: 'POST',
         body: JSON.stringify(userData),
