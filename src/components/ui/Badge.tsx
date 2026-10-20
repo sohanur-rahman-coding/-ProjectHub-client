@@ -56,7 +56,21 @@ interface RoleBadgeProps {
 }
 
 export const RoleBadge: React.FC<RoleBadgeProps> = ({ role, className }) => {
-  if (role === 'MENTOR' || role === 'ADMIN') {
+  if (role === 'ADMIN') {
+    return (
+      <span
+        className={cn(
+          'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30 shadow-sm shadow-rose-500/10',
+          className,
+        )}
+      >
+        <ShieldCheck className="w-3 h-3 text-rose-400" />
+        Admin
+      </span>
+    );
+  }
+
+  if (role === 'MENTOR') {
     return (
       <span
         className={cn(

@@ -182,6 +182,7 @@ export default function SignupPage() {
               placeholder="At least 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              showPasswordToggle={true}
               required
               helperText="Must be minimum 6 characters long"
             />

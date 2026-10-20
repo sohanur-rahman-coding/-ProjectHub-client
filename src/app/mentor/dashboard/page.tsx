@@ -71,17 +71,23 @@ export default function MentorDashboardPage() {
     );
   }
 
+  const isAdministrator = user?.role === 'ADMIN';
+
   return (
     <div className="space-y-6 py-2">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-purple-400" />
-            <h1 className="text-2xl font-bold text-white tracking-tight">Mentor Review Console</h1>
+            <ShieldCheck className={`w-5 h-5 ${isAdministrator ? 'text-rose-400' : 'text-purple-400'}`} />
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              {isAdministrator ? 'Admin & Evaluation Console' : 'Mentor Review Console'}
+            </h1>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Review submitted student projects, inspect Git repositories, and record official evaluation results.
+            {isAdministrator
+              ? 'Administrator oversight console: inspect all student projects, evaluate submissions, and audit mentor actions.'
+              : 'Review submitted student projects, inspect Git repositories, and record official evaluation results.'}
           </p>
         </div>
 
@@ -92,6 +98,22 @@ export default function MentorDashboardPage() {
           </Button>
         </div>
       </div>
+
+      {isAdministrator && (
+        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded-lg bg-rose-500/20 text-rose-300">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <span>
+              <strong>Seeded Master Admin Active:</strong> You have full system-level administrative permissions across all project submissions, metrics, and mentor evaluations.
+            </span>
+          </div>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 w-fit">
+            Super Admin
+          </span>
+        </div>
+      )}
 
       {/* Aggregated Statistics */}
       <StatsCards stats={stats} loading={loadingStats} />

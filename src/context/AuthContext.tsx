@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (credentials: { email: string; password: string }) => Promise<void>;
   register: (userData: { name: string; email: string; password: string; role?: 'STUDENT' | 'MENTOR' }) => Promise<void>;
   logout: () => void;
+  isAdmin: boolean;
   isMentor: boolean;
   isStudent: boolean;
 }
@@ -91,6 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     router.push('/login');
   };
 
+  const isAdmin = user?.role === 'ADMIN';
   const isMentor = user?.role === 'MENTOR' || user?.role === 'ADMIN';
   const isStudent = user?.role === 'STUDENT';
 
@@ -103,6 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         logout,
+        isAdmin,
         isMentor,
         isStudent,
       }}
