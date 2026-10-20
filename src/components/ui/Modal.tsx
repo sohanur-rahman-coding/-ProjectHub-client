@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -21,6 +22,12 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   maxWidth = 'lg',
 }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -37,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const maxWidths = {
     sm: 'max-w-sm',
@@ -47,23 +54,26 @@ export const Modal: React.FC<ModalProps> = ({
     '2xl': 'max-w-2xl',
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-hidden">
-      {/* Backdrop */}
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+      {/* Full-screen Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/85 backdrop-blur-md transition-opacity animate-fade-in"
         onClick={onClose}
+        aria-hidden="true"
       />
 
-      {/* Dialog Window */}
+      {/* Floating Dialog Window */}
       <div
         className={cn(
-          'relative w-full max-h-[92vh] flex flex-col rounded-2xl border border-slate-800/90 bg-slate-900/95 shadow-2xl backdrop-blur-xl z-10 transition-all overflow-hidden',
+          'relative w-full max-h-[92vh] my-auto flex flex-col rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-2xl backdrop-blur-2xl z-10 transition-all overflow-hidden animate-in fade-in zoom-in-95 duration-200',
           maxWidths[maxWidth],
         )}
+        role="dialog"
+        aria-modal="true"
       >
-        {/* Fixed Header */}
-        <div className="flex items-start justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-900/90 shrink-0">
+        {/* Pinned Header */}
+        <div className="flex items-start justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/90 shrink-0">
           <div className="pr-4">
             <h2 className="text-base sm:text-lg font-bold text-slate-100 tracking-tight">{title}</h2>
             {description && <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{description}</p>}
@@ -84,4 +94,6 @@ export const Modal: React.FC<ModalProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };

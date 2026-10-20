@@ -1,13 +1,28 @@
 import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { Toaster } from 'react-hot-toast';
 
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: 'ProjectHub - Submission & Review Dashboard',
-  description: 'A simple, modern project submission and review dashboard with JWT Role-Based Access Control.',
+  description: 'A modern, high-performance project submission and review platform for students and mentors.',
 };
 
 export default function RootLayout({
@@ -16,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <html lang="en" className={`dark ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans bg-[#080c14] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
         <AuthProvider>
           <Toaster
             position="top-right"

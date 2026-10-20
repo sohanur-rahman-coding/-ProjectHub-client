@@ -100,7 +100,8 @@ export const ReviewTable: React.FC<ReviewTableProps> = ({ onDataChange }) => {
   ];
 
   return (
-    <Card className="border-slate-800 bg-slate-900/60 p-0 overflow-hidden shadow-2xl">
+    <>
+      <Card className="border-slate-800 bg-slate-900/60 p-0 overflow-hidden shadow-2xl">
       {/* Table Header Controls */}
       <div className="p-4 sm:p-5 border-b border-slate-800/80 bg-slate-950/40 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         {/* Status Filter Tabs (Server-side) */}
@@ -353,14 +354,15 @@ export const ReviewTable: React.FC<ReviewTableProps> = ({ onDataChange }) => {
           </Button>
         </div>
       </div>
-
-      {/* Review & Evaluation Modal */}
-      <ReviewModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        submission={activeSubmission}
-        onSuccess={handleReviewSuccess}
-      />
     </Card>
+
+    {/* Review & Evaluation Modal rendered outside Card */}
+    <ReviewModal
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      submission={activeSubmission}
+      onSuccess={handleReviewSuccess}
+    />
+  </>
   );
 };
