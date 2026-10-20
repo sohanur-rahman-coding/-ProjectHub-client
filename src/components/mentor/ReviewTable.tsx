@@ -88,7 +88,7 @@ export const ReviewTable: React.FC<ReviewTableProps> = ({ onDataChange }) => {
   };
 
   const handleReviewSuccess = (updated: ProjectSubmission) => {
-    setSubmissions((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
+    fetchSubmissions(pagination.page);
     if (onDataChange) onDataChange();
   };
 

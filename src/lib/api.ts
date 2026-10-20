@@ -63,6 +63,13 @@ export const api = {
       });
     },
 
+    google: async (payload: { credential: string; role?: 'STUDENT' | 'MENTOR' }) => {
+      return request<ApiResponse<{ user: User; token: string }>>('/auth/google', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+    },
+
     getMe: async () => {
       return request<ApiResponse<{ user: User }>>('/auth/me');
     },
@@ -77,6 +84,21 @@ export const api = {
     }) => {
       return request<ApiResponse<{ submission: ProjectSubmission }>>('/submissions', {
         method: 'POST',
+        body: JSON.stringify(submission),
+      });
+    },
+
+    update: async (
+      id: string,
+      submission: {
+        projectName: string;
+        repoUrl: string;
+        liveUrl: string;
+        description: string;
+      },
+    ) => {
+      return request<ApiResponse<{ submission: ProjectSubmission }>>(`/submissions/${id}`, {
+        method: 'PUT',
         body: JSON.stringify(submission),
       });
     },
@@ -116,7 +138,7 @@ export const api = {
     updateReview: async (
       id: string,
       review: {
-        status: 'APPROVED' | 'REJECTED';
+        status: 'APPROVED' | 'REJECTED' | 'PENDING';
         feedback?: string;
       },
     ) => {
