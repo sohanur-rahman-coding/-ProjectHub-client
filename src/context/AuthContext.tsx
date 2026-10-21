@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { User } from '../types';
 import { api } from '../lib/api';
@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (credentials: { email: string; password: string }) => Promise<void>;
   loginWithGoogle: (credential: string, role?: 'STUDENT' | 'MENTOR') => Promise<void>;
   register: (userData: { name: string; email: string; password: string; role?: 'STUDENT' | 'MENTOR' }) => Promise<void>;
+  setSession: (token: string, user: User) => void;
   logout: () => void;
   isAdmin: boolean;
   isMentor: boolean;
@@ -101,6 +102,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const setSession = useCallback((token: string, user: User) => {
+    localStorage.setItem('auth_token', token);
+    setToken(token);
+    setUser(user);
+  }, []);
+
   const logout = () => {
     localStorage.removeItem('auth_token');
     setUser(null);
@@ -121,6 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         loginWithGoogle,
         register,
+        setSession,
         logout,
         isAdmin,
         isMentor,

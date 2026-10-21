@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { X, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface ModalProps {
@@ -12,6 +12,7 @@ interface ModalProps {
   description?: string;
   children: React.ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  allowFullScreen?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -21,17 +22,30 @@ export const Modal: React.FC<ModalProps> = ({
   description,
   children,
   maxWidth = 'lg',
+  allowFullScreen = true,
 }) => {
   const [mounted, setMounted] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Reset fullscreen when closed/opened
+  useEffect(() => {
+    if (!isOpen) {
+      setIsFullscreen(false);
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        if (isFullscreen) {
+          setIsFullscreen(false);
+        } else {
+          onClose();
+        }
       }
     };
     if (isOpen) {
@@ -42,7 +56,7 @@ export const Modal: React.FC<ModalProps> = ({
       document.body.style.overflow = 'unset';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, isFullscreen, onClose]);
 
   if (!isOpen || !mounted) return null;
 
@@ -55,7 +69,12 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div
+      className={cn(
+        'fixed inset-0 z-[9999] flex items-center justify-center transition-all',
+        isFullscreen ? 'p-0 overflow-hidden' : 'p-3 sm:p-6 overflow-y-auto'
+      )}
+    >
       {/* Full-screen Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/85 backdrop-blur-md transition-opacity animate-fade-in"
@@ -63,11 +82,13 @@ export const Modal: React.FC<ModalProps> = ({
         aria-hidden="true"
       />
 
-      {/* Floating Dialog Window */}
+      {/* Floating / Full-screen Dialog Window */}
       <div
         className={cn(
-          'relative w-full max-h-[92vh] my-auto flex flex-col rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-2xl backdrop-blur-2xl z-10 transition-all overflow-hidden animate-in fade-in zoom-in-95 duration-200',
-          maxWidths[maxWidth],
+          'relative w-full flex flex-col border border-slate-700/80 bg-slate-900/95 shadow-2xl backdrop-blur-2xl z-10 transition-all overflow-hidden animate-in fade-in zoom-in-95 duration-200',
+          isFullscreen
+            ? 'h-full max-h-screen rounded-none border-0'
+            : cn('max-h-[92vh] my-auto rounded-2xl', maxWidths[maxWidth])
         )}
         role="dialog"
         aria-modal="true"
@@ -78,13 +99,30 @@ export const Modal: React.FC<ModalProps> = ({
             <h2 className="text-base sm:text-lg font-bold text-slate-100 tracking-tight">{title}</h2>
             {description && <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{description}</p>}
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-100 transition-colors shrink-0"
-            aria-label="Close dialog"
-          >
-            <X className="w-4 h-4" />
-          </button>
+
+          <div className="flex items-center gap-1.5 shrink-0">
+            {allowFullScreen && (
+              <button
+                type="button"
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-100 transition-colors"
+                title={isFullscreen ? 'Exit Full Screen' : 'Open Full Screen'}
+                aria-label={isFullscreen ? 'Exit Full Screen' : 'Open Full Screen'}
+              >
+                {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-100 transition-colors"
+              title="Close dialog"
+              aria-label="Close dialog"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Scrollable Content Body */}

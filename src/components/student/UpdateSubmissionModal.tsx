@@ -7,7 +7,7 @@ import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Button } from '../ui/Button';
 import { api } from '../../lib/api';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import {
   Edit3,
   GitBranch,

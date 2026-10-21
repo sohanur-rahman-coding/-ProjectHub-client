@@ -7,7 +7,7 @@ import { Textarea } from '../ui/Textarea';
 import { Button } from '../ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/Card';
 import { api } from '../../lib/api';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { Send, Sparkles, AlertCircle, CheckCircle, ExternalLink } from 'lucide-react';
 
 export const SubmissionForm: React.FC = () => {

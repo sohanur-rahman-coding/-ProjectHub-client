@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../../components/ui/Card';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import { UserPlus, GraduationCap, ShieldCheck, AlertCircle } from 'lucide-react';
 import { GoogleButton } from '../../components/ui/GoogleButton';
 

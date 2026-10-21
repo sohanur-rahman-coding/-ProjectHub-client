@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ProjectHub — Client Application
 
-## Getting Started
+> Modern, responsive project submission and mentor review platform built with Next.js (App Router), TypeScript, and TailwindCSS.
 
-First, run the development server:
+---
 
+## 🎯 Overview & Task Deliverables
+
+ProjectHub Client provides a clean, dual-role interface for students and mentors:
+
+- **Student Portal:** Submit projects with GitHub/GitLab/Bitbucket links, live previews, and descriptions. View evaluation statuses, read mentor feedback, and update/resubmit rejected projects.
+- **Mentor Review Console:** High-performance dashboard featuring server-side pagination, search, status filtering (`ALL`, `PENDING`, `APPROVED`, `REJECTED`), and quick-evaluation modals.
+- **Interactive Modals:** Responsive floating dialogs with backdrop blur and an integrated **Fullscreen Toggle (`Maximize2` / `Minimize2`)** to inspect long code descriptions.
+- **Zero Tech Jargon:** Clean, human UI focused strictly on user experience, assignment progress, and grading rubrics.
+
+---
+
+## ⚡ Getting Started
+
+### 1. Prerequisites
+- **Node.js:** v18.0.0+ or v20.0.0+
+- **npm:** v9.0.0+
+- Backend API running on `http://localhost:5000`
+
+### 2. Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Environment Configuration
+Create a `.env` or `.env.local` file in the client root:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id_here
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 4. Run Development Server
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open **`http://localhost:3000`** in your browser.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔑 Demo Credentials
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The login page (`/login`) includes 1-click auto-fill buttons for quick testing:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Role | Email | Password | Primary Routes |
+| :--- | :--- | :--- | :--- |
+| **Mentor / Evaluator** | `mentor@example.com` | `Password@123` | `/mentor/dashboard` |
+| **Student** | `student@example.com` | `Password@123` | `/student/submit`, `/student/my-projects` |
+| **Admin** | `admin@example.com` | `Password@123` | Full access across all review & student views |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📂 Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+ProjectHub-client/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx              # Root layout with AuthProvider & Toaster
+│   │   ├── page.tsx                # Clean, professional home page
+│   │   ├── login/page.tsx          # Dual credential login & Google sign-in
+│   │   ├── signup/page.tsx         # Account registration
+│   │   ├── student/
+│   │   │   ├── submit/page.tsx     # Student project submission portal
+│   │   │   └── my-projects/page.tsx# Student submissions tracker
+│   │   └── mentor/
+│   │       └── dashboard/page.tsx  # Mentor Review Console
+│   ├── components/
+│   │   ├── ui/                     # Modal (with Fullscreen toggle), Button, Input, Textarea, Card, Badge
+│   │   ├── layout/                 # Navbar with role indicators & clean Footer
+│   │   ├── mentor/                 # StatsCards, Paginated ReviewTable, ReviewModal
+│   │   └── student/                # SubmissionForm, SubmissionsList, UpdateSubmissionModal
+│   ├── context/                    # AuthContext (JWT persistence, role routing)
+│   ├── lib/                        # Typed API client & helper utilities
+│   └── types/                      # Shared TypeScript interfaces
+├── .env                            # Client environment configuration
+├── package.json
+└── tsconfig.json
+```
+
+---
+
+## ✨ Features Implemented
+
+### 1. Student Submission & Tracking
+- **Repository Validation:** Validates URLs for GitHub, GitLab, and Bitbucket hosts.
+- **Duplicate Prevention Alerts:** Immediate UI feedback if a repository URL or project title is already registered.
+- **My Submissions Dashboard:** Real-time status badges (`PENDING`, `APPROVED`, `REJECTED`) and mentor critique notes.
+- **Resubmission Flow:** Editing a rejected submission automatically updates status back to `PENDING` for re-evaluation.
+
+### 2. Mentor Review Console
+- **Real-Time Aggregations:** Live metrics cards for Total, Pending, Approved, and Rejected projects, with approval rate progress.
+- **Server-Side Pagination & Filtering:** Filter by status or execute keyword search across student names and project titles.
+- **Evaluation Modal:** Approve or reject submissions, select pre-built constructive feedback templates, and inspect code repos with 1-click clipboard helpers.
+- **Fullscreen Mode:** Toggle between compact dialog and full-screen workspace with one click.

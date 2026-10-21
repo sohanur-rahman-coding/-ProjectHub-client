@@ -9,7 +9,7 @@ import { Button } from '../ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { formatDate } from '../../lib/utils';
 import { UpdateSubmissionModal } from './UpdateSubmissionModal';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 import {
   ExternalLink,
   GitBranch,
